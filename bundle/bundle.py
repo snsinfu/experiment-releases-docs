@@ -4,8 +4,8 @@ import re
 
 
 RE_LOCAL_INCLUDE = re.compile('#include "(.+?)"')
-RE_VERSION_COMMENT = re.compile('// Version:\s*(.*)')
-RE_BUNDLE_POINT = re.compile('// BUNDLE //')
+RE_VERSION_COMMENT = re.compile("// Version:\s*(.*)")
+RE_BUNDLE_POINT = re.compile("// BUNDLE //")
 
 
 def main():
@@ -14,9 +14,10 @@ def main():
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--template", type=str, default=None, help="Output template file")
-    parser.add_argument("--version", type=str, default=None, help="Version string")
-    parser.add_argument("root", type=str, help="Root header")
+    arg = parser.add_argument
+    arg("--template", type=str, default=None, help="Output template file")
+    arg("--version", type=str, default=None, help="Version string")
+    arg("root", type=str, help="Root header")
     return vars(parser.parse_args())
 
 
@@ -58,7 +59,7 @@ def render_template(template, bundle, version):
 
         if RE_VERSION_COMMENT.match(line) and version:
             ma = RE_VERSION_COMMENT.match(line)
-            output.append(line[:ma.start(1)] + version)
+            output.append(line[: ma.start(1)] + version)
             continue
 
         output.append(line)
@@ -91,7 +92,9 @@ class Header:
 
         rel_depends = extract_local_includes(lines)
         basedir = os.path.dirname(path)
-        self.depend_paths = [os.path.normpath(os.path.join(basedir, dep)) for dep in rel_depends]
+        self.depend_paths = [
+            os.path.normpath(os.path.join(basedir, dep)) for dep in rel_depends
+        ]
 
     def resolve_depends(self, headers):
         self.depends = [headers[path] for path in self.depend_paths]
