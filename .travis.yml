@@ -1,0 +1,16 @@
+dist: trusty
+sudo: false
+language: cpp
+
+script:
+  - make -C tests
+  - make -C bundle VERSION=$TRAVIS_BRANCH
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: bundle/range.hpp
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: $TRAVIS_TAG =~ v[0-9]+\..*
