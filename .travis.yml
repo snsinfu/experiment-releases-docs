@@ -1,15 +1,33 @@
 dist: xenial
 language: cpp
 
-script:
-  - make -C tests
-  - make -C bundle VERSION=$TRAVIS_BRANCH
+addons:
+  apt:
+    packages:
+      - clang
+      - libc++-dev
 
-deploy:
-  provider: releases
-  api_key: $GITHUB_TOKEN
-  file: bundle/range.hpp
-  skip_cleanup: true
-  on:
-    tags: true
-    condition: $TRAVIS_TAG =~ v[0-9]+\..*
+stages:
+  - test
+  - deploy
+
+jobs:
+  include:
+    - stage: test
+      name: g++
+      script: make -C tests CXX=g++
+
+    - stage: test
+      name: clang++
+      script: make -C tests CXX=clang++ CXXFLAGS=-stdlib=libc++
+
+    - stage: deploy
+      script: make -C bundle VERSION=$TRAVIS_BRANCH
+      deploy:
+        provider: releases
+        api_key: $GITHUB_TOKEN
+        file: bundle/range.hpp
+        skip_cleanup: true
+        on:
+          tags: true
+          condition: $TRAVIS_TAG =~ v[0-9]+\..*
