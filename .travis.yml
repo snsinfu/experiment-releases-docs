@@ -2,8 +2,8 @@ dist: xenial
 language: cpp
 
 script:
-  - make -C tests CXX=g++
-  - make -C tests CXX=clang++ CXXFLAGS=-stdlib=libc++
+  - make -C tests clean; make -C tests CXX=g++
+  - make -C tests clean; make -C tests CXX=clang++ CXXFLAGS=-stdlib=libc++
   - make -C bundle VERSION=$TRAVIS_BRANCH
 
 deploy:

@@ -4,4 +4,4 @@ test: main
 	./main
 
 clean:
-	@:
+	rm -f main
