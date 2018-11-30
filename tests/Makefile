@@ -1,8 +1,7 @@
 .PHONY: test clean
 
-test:
-	@echo Compiler: $(CXX) $(CXXFLAGS)
-	@:
+test: main
+	./main
 
 clean:
 	@:
