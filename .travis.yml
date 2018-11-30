@@ -1,6 +1,12 @@
 dist: xenial
 language: cpp
 
+addons:
+  apt:
+    packages:
+      - clang
+      - libc++-dev
+
 script:
   - make -C tests clean; make -C tests CXX=g++
   - make -C tests clean; make -C tests CXX=clang++ CXXFLAGS=-stdlib=libc++
